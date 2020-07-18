@@ -1,28 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import colors from "../config/colors";
 
 function ImageInput({ imageUri, onChangeImage }) {
   const [granted, setGranted] = useState(false);
 
   const requestCameraRollPermission = async () => {
-    console.log("requesting");
     try {
       const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
-      console.log("g", granted);
       setGranted(granted);
+      if (!granted)
+        Alert.alert(
+          "Permission required",
+          "You need to enable permission to access this feature."
+        );
     } catch (error) {
       console.log("Error while getting permission", error);
     }
   };
 
-  const handleClick = async () => {
-    console.log("clicked", granted);
+  const selectImage = async () => {
     if (granted) {
-      const { uri } = await ImagePicker.launchImageLibraryAsync();
+      const { uri } = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
       onChangeImage(uri);
+    }
+  };
+
+  const handlePress = async () => {
+    if (!imageUri) selectImage();
+    if (imageUri) {
+      Alert.alert("Delete", "Are you sure you want to delete this image?", [
+        {
+          text: "Yes",
+          onPress: () => onChangeImage(null),
+        },
+        {
+          text: "No",
+        },
+      ]);
     }
   };
 
@@ -31,7 +52,7 @@ function ImageInput({ imageUri, onChangeImage }) {
   }, []);
 
   return (
-    <TouchableOpacity onPress={handleClick}>
+    <TouchableOpacity onPress={handlePress}>
       <View style={styles.container}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.image} />
