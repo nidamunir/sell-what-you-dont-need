@@ -8,12 +8,11 @@ const Stack = createStackNavigator();
 
 const FeedNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator options={{ headerShown: false }}>
       <Stack.Screen name="Feed" component={ListingsScreen}></Stack.Screen>
       <Stack.Screen
         name="ListingDetails"
         component={ListingDetailsScreen}
-        // options={{ headerShown: false }}
       ></Stack.Screen>
     </Stack.Navigator>
   );
