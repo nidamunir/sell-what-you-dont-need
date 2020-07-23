@@ -10,7 +10,6 @@ import Text from "./Text";
 import colors from "../config/colors";
 
 function Card({ title, subTitle, imageUrl, onPress }) {
-  console.log(imageUrl);
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>

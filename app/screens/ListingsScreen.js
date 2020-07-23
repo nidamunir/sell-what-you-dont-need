@@ -14,10 +14,9 @@ function ListingsScreen({ navigation }) {
     listingsApi.getListings
   );
   useEffect(() => {
+    console.log("loading listings");
     loadListings();
   }, []);
-
-  console.log(loading, error);
 
   return error ? (
     <>

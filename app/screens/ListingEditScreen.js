@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import * as Yup from "yup";
 
 import {
@@ -80,9 +80,11 @@ const categories = [
 ];
 
 function ListingEditScreen() {
-  const submitData = useApi(listings.getListings);
-  console.log(submitData.data);
-
+  const postListingsApi = useApi(listings.postListings);
+  console.log("submitted with error", postListingsApi.error);
+  // if (postListingsApi.error) {
+  //   return Alert.alert("Error");
+  // }
   return (
     <Screen style={styles.container}>
       <Form
@@ -94,13 +96,7 @@ function ListingEditScreen() {
           images: [],
         }}
         onSubmit={(values) => {
-          const { category, ...rest } = values;
-          // submitData.request({
-          //   ...rest,
-          //   categoryId: category.value,
-          // });
-          submitData.request();
-          // console.log("Submitting values", values);
+          postListingsApi.request(values);
         }}
         validationSchema={validationSchema}
       >
